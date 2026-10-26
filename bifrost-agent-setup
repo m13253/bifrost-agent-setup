@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec uv run bifrost-agent-setup "$@"

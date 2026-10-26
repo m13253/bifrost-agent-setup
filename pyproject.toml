@@ -1,0 +1,23 @@
+[project]
+name = "bifrost-agent-setup"
+version = "0.1.0"
+description = "Automatically set up your coding agents and LLM clients from Bifrost model catalog"
+readme = "README.md"
+authors = [{ name = "Star Brilliant", email = "coder@poorlab.com" }]
+requires-python = ">=3.15"
+dependencies = [
+    "dacite",
+    "platformdirs",
+    "PyYAML",
+    "requests[socks]",
+    "simplejson",
+]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+
+[project.scripts]
+bifrost-agent-setup = "bifrost_agent_setup:main"
+
+[build-system]
+requires = ["uv_build>=0.13,<0.14.0"]
+build-backend = "uv_build"

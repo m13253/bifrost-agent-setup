@@ -1,0 +1,57 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://github.com/m13253/bifrost-agent-setup/blob/master/config.schema.json",
+    "title": "config.json",
+    "description": "bifrost-agent-setup configuration file",
+    "type": "object",
+    "properties": {
+        "bifrost_name": {
+            "type": "string",
+            "minLength": 1
+        },
+        "bifrost_url": {
+            "type": "string",
+            "format": "uri",
+            "minLength": 1
+        },
+        "virtual_key": {
+            "anyOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "string",
+                    "enum": [
+                        ""
+                    ]
+                },
+                {
+                    "type": "string",
+                    "pattern": "^sk-bf-"
+                }
+            ]
+        },
+        "fallback_metadata": {
+            "type": "object",
+            "properties": {
+                "context_length": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0
+                },
+                "max_output_tokens": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "required": [
+                "context_length",
+                "max_output_tokens"
+            ]
+        }
+    },
+    "required": [
+        "bifrost_name",
+        "bifrost_url",
+        "fallback_metadata"
+    ]
+}

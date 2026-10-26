@@ -1,0 +1,10 @@
+{
+    "$schema": "https://github.com/m13253/bifrost-agent-setup/blob/master/config.schema.json",
+    "bifrost_name": "Bifrost",
+    "bifrost_url": "http://localhost:8080",
+    "virtual_key": "sk-bf-***",
+    "fallback_metadata": {
+        "context_length": 262144,
+        "max_output_tokens": 65536
+    }
+}
