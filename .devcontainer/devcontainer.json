@@ -14,7 +14,6 @@
         "UV_LINK_MODE": "copy"
     },
     "onCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh",
-    "updateContentCommand": "uv sync",
     "securityOpt": [
         // Fixes VS Code terminal sandbox & Claude Code sandbox
         // https://github.com/containers/bubblewrap/issues/505#issuecomment-5708882071
