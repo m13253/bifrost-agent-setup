@@ -17,13 +17,13 @@ from . import datasheet, schema, utils
 
 
 def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
-    out_path = (
+    models_path = (
         platformdirs.user_config_path("Code", appauthor=False, roaming=True)
         / "User"
         / "chatLanguageModels.json"
     )
     try:
-        with out_path.open("rb") as f:
+        with models_path.open("rb") as f:
             providers_old = simplejson.load(f, use_decimal=True)
     except FileNotFoundError:
         providers_old = []
@@ -70,7 +70,7 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
     if not inserted:
         providers_new.append(provider)
 
-    with utils.AtomicFile(out_path, "w") as f:
+    with utils.AtomicFile(models_path, "w") as f:
         simplejson.dump(
             providers_new,
             f,
@@ -80,7 +80,7 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
             sort_keys=False,
         )
 
-    return out_path
+    return models_path
 
 
 def setup_model(

@@ -14,20 +14,20 @@ from . import datasheet, schema, utils
 
 
 def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
-    out_path = pathlib.Path.home() / ".config" / "zed" / "global_settings.json"
+    settings_path = pathlib.Path.home() / ".config" / "zed" / "global_settings.json"
     try:
-        with out_path.open("rb") as f:
-            providers = simplejson.load(f, use_decimal=True)
+        with settings_path.open("rb") as f:
+            settings = simplejson.load(f, use_decimal=True)
     except FileNotFoundError:
-        providers = {}
-    if not isinstance(providers, dict):
+        settings = {}
+    if not isinstance(settings, dict):
         raise TypeError("global_settings.json should contain a JSON object")
 
-    if "language_models" not in providers:
-        providers["language_models"] = {}
-    if "openai_compatible" not in providers["language_models"]:
-        providers["language_models"]["openai_compatible"] = {}
-    providers["language_models"]["openai_compatible"][config.bifrost_name] = {
+    if "language_models" not in settings:
+        settings["language_models"] = {}
+    if "openai_compatible" not in settings["language_models"]:
+        settings["language_models"]["openai_compatible"] = {}
+    settings["language_models"]["openai_compatible"][config.bifrost_name] = {
         "api_url": utils.url_slash_join(config.bifrost_url, "v1"),
         "available_models": [
             setup_model(config, model)
@@ -36,9 +36,9 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
         ],
     }
 
-    with utils.AtomicFile(out_path, "w") as f:
+    with utils.AtomicFile(settings_path, "w") as f:
         simplejson.dump(
-            providers,
+            settings,
             f,
             ensure_ascii=False,
             indent=4,
@@ -46,7 +46,7 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
             sort_keys=False,
         )
 
-    return out_path
+    return settings_path
 
 
 def setup_model(config: schema.Config, model: schema.Model) -> dict[str, Any]:

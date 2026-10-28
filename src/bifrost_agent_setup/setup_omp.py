@@ -19,7 +19,7 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
         (pathlib.Path.home() / ".omp" / "agent" / "models.yaml", "yaml"),
         (pathlib.Path.home() / ".omp" / "agent" / "models.json", "json"),
     ]
-    out_path = pathlib.Path.home() / ".omp" / "agent" / "models.yml"
+    models_path = pathlib.Path.home() / ".omp" / "agent" / "models.yml"
     providers = {}
     for in_path, in_format in in_paths:
         try:
@@ -38,6 +38,8 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
     if "providers" not in providers:
         providers["providers"] = {}
     provider = setup_pi.setup_provider(config, models)
+    if config.virtual_key:
+        provider["apiKey"] = config.virtual_key
     for model in provider["models"]:
         if (
             not isinstance(model, dict)
@@ -54,7 +56,7 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
                 model["cost"][k] = float(v)
     providers["providers"][config.bifrost_name] = provider
 
-    with utils.AtomicFile(out_path, "w") as f:
+    with utils.AtomicFile(models_path, "w") as f:
         yaml.safe_dump(providers, f)
 
-    return out_path
+    return models_path

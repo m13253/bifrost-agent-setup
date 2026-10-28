@@ -14,20 +14,39 @@ from . import datasheet, schema, utils
 
 
 def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
-    out_path = pathlib.Path.home() / ".pi" / "agent" / "models.json"
+    auth_path = pathlib.Path.home() / ".pi" / "agent" / "auth.json"
+    models_path = pathlib.Path.home() / ".pi" / "agent" / "models.json"
+
+    if config.virtual_key:
+        try:
+            with auth_path.open("rb") as f:
+                auth = simplejson.load(f, use_decimal=True)
+        except FileNotFoundError:
+            auth = {}
+    else:
+        auth = {}
+    if not isinstance(auth, dict):
+        raise TypeError("auth.json should contain a JSON object")
+
     try:
-        with out_path.open("rb") as f:
+        with models_path.open("rb") as f:
             providers = simplejson.load(f, use_decimal=True)
     except FileNotFoundError:
         providers = {}
     if not isinstance(providers, dict):
         raise TypeError("models.json should contain a JSON object")
 
+    if config.virtual_key:
+        auth[config.bifrost_name] = {
+            "type": "api_key",
+            "key": config.virtual_key,
+        }
+
     if "providers" not in providers:
         providers["providers"] = {}
     providers["providers"][config.bifrost_name] = setup_provider(config, models)
 
-    with utils.AtomicFile(out_path, "w") as f:
+    with utils.AtomicFile(models_path, "w") as f:
         simplejson.dump(
             providers,
             f,
@@ -37,7 +56,18 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
             sort_keys=False,
         )
 
-    return out_path
+    if config.virtual_key:
+        with utils.AtomicFile(auth_path, "w") as f:
+            simplejson.dump(
+                auth,
+                f,
+                ensure_ascii=False,
+                indent=4,
+                use_decimal=True,
+                sort_keys=False,
+            )
+
+    return models_path
 
 
 def setup_provider(config: schema.Config, models: schema.Models) -> dict[str, Any]:
