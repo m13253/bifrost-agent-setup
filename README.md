@@ -8,8 +8,13 @@ Automatically set up your coding agents and LLM clients from Bifrost model catal
 # Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
+# Download this program
+git clone https://github.com/m13253/bifrost-agent-setup.git
+cd bifrost-agent-setup
+
 # Edit config.json
 cp config.example.json config.json
+${EDITOR:-nano} config.json
 
 # Run bifrost-agent-setup
 ./bifrost-agent-setup omp pi vscode zed
@@ -17,7 +22,7 @@ cp config.example.json config.json
 
 ## Can you support other coding agents?
 
-Sure, send me a feature request, or better, a pull request.
+Sure, send me a Feature Request, or better, a Pull Request.
 
 ## Why isn’t there Claude Code or Codex?
 
