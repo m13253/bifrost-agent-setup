@@ -15,6 +15,10 @@ cp config.example.json config.json
 ./bifrost-agent-setup omp pi vscode zed
 ```
 
+## Can you support other coding agents?
+
+Sure, send me a feature request, or better, a pull request.
+
 ## Why isn’t there Claude Code or Codex?
 
 They are supported by Bifrost officially: https://docs.getbifrost.ai/cli-agents/overview
