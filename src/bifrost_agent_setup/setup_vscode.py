@@ -43,14 +43,14 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
             break
     else:
         api_key = config.virtual_key
-    api_url = utils.url_slash_join(config.bifrost_url, "v1/responses")
+    api_url = utils.url_slash_join(config.bifrost_url, "v1/chat/completions")
 
     provider = utils.coalesce_dict(
         {
             "name": config.bifrost_name,
             "vendor": "customendpoint",
             "apiKey": api_key,
-            "apiType": "responses",
+            "apiType": "chat-completions",
             "models": [
                 setup_model(config, model, api_url)
                 for model in models.data
@@ -106,12 +106,16 @@ def setup_model(
             "url": api_url,
             "toolCalling": True,
             "vision": datasheet.model_supports_vision(model),
-            "thinking": model.reasoning is not None,
+            # As of VS Code 1.144.0, turning on "thinking" has the following effects:
+            # 1. Removes the "temperature" parameter
+            # 2. Uses "max_completion_tokens" instead of "max_tokens"
+            # 3. Sends back reasoning history when the protocol is chat-completions and if
+            #    a) the user turns on "thinkingInHistory" through "github.copilot.chat.modelCapabilityOverrides",
+            #    b) or the model is named kimi-k3
+            # It does not actually affect thinking itself.
+            "thinking": True,
             "maxInputTokens": limits.context_length - limits.max_output_tokens,
             "maxOutputTokens": limits.max_output_tokens,
-            "reasoningEffortFormat": "responses"
-            if model.reasoning is not None
-            else None,
             "supportsReasoningEffort": model.reasoning.supported_efforts
             if model.reasoning is not None
             else None,
