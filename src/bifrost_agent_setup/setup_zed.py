@@ -45,6 +45,7 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
             use_decimal=True,
             sort_keys=False,
         )
+        f.write("\n")
 
     return settings_path
 

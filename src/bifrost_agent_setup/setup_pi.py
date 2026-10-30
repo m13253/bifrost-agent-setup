@@ -51,10 +51,11 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
             providers,
             f,
             ensure_ascii=False,
-            indent=4,
+            indent=2,
             use_decimal=True,
             sort_keys=False,
         )
+        f.write("\n")
 
     if config.virtual_key:
         with utils.AtomicFile(auth_path, "w") as f:
@@ -62,10 +63,11 @@ def setup(config: schema.Config, models: schema.Models) -> pathlib.Path:
                 auth,
                 f,
                 ensure_ascii=False,
-                indent=4,
+                indent=2,
                 use_decimal=True,
                 sort_keys=False,
             )
+            f.write("\n")
 
     return models_path
 
