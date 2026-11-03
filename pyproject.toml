@@ -7,9 +7,9 @@ authors = [{ name = "Star Brilliant", email = "coder@poorlab.com" }]
 requires-python = ">=3.15"
 dependencies = [
     "dacite",
+    "httpx[brotli,http2,socks,zstd]",
     "platformdirs",
     "PyYAML",
-    "requests[socks]",
     "simplejson",
 ]
 license = "Apache-2.0"

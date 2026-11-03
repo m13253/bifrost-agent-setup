@@ -3,7 +3,7 @@ import pathlib
 from typing import cast
 
 import dacite
-import requests
+import httpx
 import simplejson
 
 from . import dispatch, schema, utils
@@ -46,15 +46,15 @@ def main(argv: list[str] | None = None) -> None:
     models_url = utils.url_slash_join(config.bifrost_url, "v1/models")
     request_headers = utils.coalesce_dict(
         {
-            "Accept": "application/json",
-            "Authorization": f"Bearer {config.virtual_key}"
+            "accept": "application/json",
+            "authorization": f"Bearer {config.virtual_key}"
             if config.virtual_key
             else None,
-            "User-Agent": "bifrost-agent-setup",
+            "user-agent": "bifrost-agent-setup",
         }
     )
     print(f"Loading {models_url}… ", end="", flush=True)
-    with requests.get(models_url, headers=request_headers) as r:
+    with httpx.stream("GET", models_url, headers=request_headers) as r:
         r.raise_for_status()
         models_json = r.text
     models = dacite.from_dict(
