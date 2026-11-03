@@ -1,20 +1,23 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://github.com/m13253/bifrost-agent-setup/blob/master/config.schema.json",
+    "$id": "https://github.com/m13253/bifrost-agent-setup/raw/master/config.schema.json",
     "title": "config.json",
     "description": "bifrost-agent-setup configuration file",
     "type": "object",
     "properties": {
         "bifrost_name": {
             "type": "string",
+            "default": "Bifrost",
             "minLength": 1
         },
         "bifrost_url": {
             "type": "string",
+            "default": "http://localhost:8080",
             "format": "uri",
             "minLength": 1
         },
         "virtual_key": {
+            "default": null,
             "anyOf": [
                 {
                     "type": "null"
@@ -36,10 +39,12 @@
             "properties": {
                 "context_length": {
                     "type": "integer",
+                    "default": 262144,
                     "exclusiveMinimum": 0
                 },
                 "max_output_tokens": {
                     "type": "integer",
+                    "default": 65536,
                     "exclusiveMinimum": 0
                 }
             },

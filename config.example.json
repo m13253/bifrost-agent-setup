@@ -1,5 +1,5 @@
 {
-    "$schema": "https://github.com/m13253/bifrost-agent-setup/blob/master/config.schema.json",
+    "$schema": "https://github.com/m13253/bifrost-agent-setup/raw/master/config.schema.json",
     "bifrost_name": "Bifrost",
     "bifrost_url": "http://localhost:8080",
     "virtual_key": "sk-bf-***",
